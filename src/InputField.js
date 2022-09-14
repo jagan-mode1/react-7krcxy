@@ -10,8 +10,10 @@ const InputField = ({
   validators,
   type,
   onChange,
+  onFocus,
   name,
   ref,
+  mainError,
 }) => {
   const [error, setError] = useState(false);
 
@@ -19,6 +21,12 @@ const InputField = ({
     const { value } = event.target;
     setError(validateInput(validators, value));
     onChange(value);
+  };
+  const handleChange2 = (event) => {
+    console.log('focus working');
+    const { value } = event.target;
+    setError(validateInput(validators, value));
+    onFocus(value);
   };
 
   return (
@@ -33,6 +41,8 @@ const InputField = ({
           value={value}
           defaultValue={value}
           onChange={handleChange}
+          onBlur={handleChange}
+          onFocus={handleChange2}
         />
       ) : (
         <input
@@ -42,9 +52,17 @@ const InputField = ({
           className="form-control"
           placeholder={placeholder}
           onChange={handleChange}
+          onBlur={handleChange}
+          onFocus={handleChange2} 
+          required
         />
       )}
       {error && <span className="text-danger">{error.message}</span>}
+      {mainError === '' ? (
+        ''
+      ) : (
+        <span className="text-danger">{mainError}as</span>
+      )}
     </div>
   );
 };
@@ -66,6 +84,7 @@ InputField.defaultProps = {
   placeholder: '',
   type: 'text',
   validators: [],
+  mainError: '',
 };
 
 export default InputField;
